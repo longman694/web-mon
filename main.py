@@ -40,7 +40,7 @@ def test_urls(config, last_status) -> (Dict[str, Any], Dict[str, Any]):
     for target in config['targets']:
         name = target['name']
         url = target['url']
-        res = requests.get(url)
+        res = requests.get(url, headers={'User-Agent': 'check_http'})
         if 200 <= res.status_code < 400:
             print('checking {} ... OK'.format(name))
             ok = True
