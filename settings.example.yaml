@@ -1,0 +1,8 @@
+targets:
+  - name: Google
+    url: https://google.com
+  - name: youtube
+    url: https://youtube.com
+pushover:
+  token: <pushover application token>
+  user: <pushover user key>
