@@ -40,13 +40,16 @@ def test_urls(config, last_status) -> (Dict[str, Any], Dict[str, Any]):
     for target in config['targets']:
         name = target['name']
         url = target['url']
-        res = requests.get(url, headers={'User-Agent': 'check_http'})
-        if 200 <= res.status_code < 400:
-            print('checking {} ... OK'.format(name))
-            ok = True
-        else:
-            print('checking {} ... ERROR'.format(name))
-            ok = False
+        retry = 0
+        ok = False
+        while not ok and retry < 3:
+            res = requests.get(url, headers={'User-Agent': 'check_http'}, timeout=60)
+            if 200 <= res.status_code < 400:
+                print('checking {} ... OK'.format(name))
+                ok = True
+            else:
+                print('checking {} ... ERROR'.format(name))
+                retry += 1
         new_status[name]['ok'] = ok
         if last_status.get(name, {}).get('ok') != ok:
             report_lines.append('{} change status to {}.'.format(
